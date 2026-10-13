@@ -1,50 +1,22 @@
 # test-manager-library-3145556-tool
 
-> **Prueba técnica · Ficha ADSO 3145556**
-> Entrega: **martes 13 de octubre de 2026, a las 5:00 p. m.** (17:00, hora Colombia).
+> **Prueba técnica · Ficha ADSO 3145556** — entrega: martes 13 de octubre de 2026, 17:00 (hora Colombia).
 
-Este repositorio guarda las **utilidades** de *Manager Library*: el sembrador de datos de demostración, que usa la API. **Empieza vacío a propósito**: se construye en el fork de cada aprendiz.
+Utilidades de *Manager Library*. Contiene el **sembrador de datos de demostración** (`seed.mjs`, T-21), que usa **solo la API**
+(`data-model.md` §9: nunca SQL directo).
 
-## Instrucciones
+## Uso
 
-Cada aprendiz debe **crear el fork** de los seis repositorios del proyecto y **resolver el proyecto
-con el spec planteado**.
+Requiere Node 22 y la API levantada desde `infra`.
 
-1. Hacer fork, a su cuenta de GitHub, de cada repositorio de la tabla del final.
-2. Leer el spec en [`test-manager-library-3145556-docs`](https://github.com/code-sena/test-manager-library-3145556-docs).
-   Se entrega en dos versiones: `spec-python/` y `spec-.net/`.
-3. Desarrollar en los forks.
+```bash
+BASE=http://localhost:8000/api/v1 ADMIN_USERNAME=admin ADMIN_PASSWORD=... node seed.mjs
+```
 
-## El reto se desarrolla con React y PHP (Laravel)
+Crea 40 libros (en las cinco categorías), 10 socios y 15 préstamos, y muestra cuántas filas tiene el reporte de más prestados del día.
 
-El spec está escrito para Python y para .NET, pero el reto **no** se hace en esos lenguajes:
+## Limitación conocida
 
-| Capa | Tecnología del reto |
-|---|---|
-| Frontend | React |
-| Backend | PHP con Laravel |
-
-Lo que el spec define sobre el negocio —historias, criterios de aceptación, reglas, contrato de la
-API, modelo de datos— se respeta. Lo que define sobre la tecnología se traduce a React y Laravel.
-
-## La prueba no consiste en escribir el código
-
-El propósito principal es ver la **capacidad de desempeño con SDD** (*Spec-Driven Development*,
-desarrollo guiado por especificación): cómo se lee, se interpreta y se aplica una especificación
-para llevarla a un stack distinto. El código es el medio, no el fin.
-
-## Entrega
-
-Cuenta lo que quede **subido a los forks antes de las 5:00 p. m.** (17:00). Lo que llegue después no se revisa.
-No hay prórroga: suban avances parciales con commits pequeños durante la prueba.
-
-## Los seis repositorios
-
-| Repositorio | Qué va ahí |
-|---|---|
-| [`test-manager-library-3145556-docs`](https://github.com/code-sena/test-manager-library-3145556-docs) | El spec: `spec-python/` y `spec-.net/` |
-| [`test-manager-library-3145556-api`](https://github.com/code-sena/test-manager-library-3145556-api) | Backend en PHP (Laravel) |
-| [`test-manager-library-3145556-app`](https://github.com/code-sena/test-manager-library-3145556-app) | Frontend en React |
-| [`test-manager-library-3145556-page`](https://github.com/code-sena/test-manager-library-3145556-page) | Sitio público estático de presentación |
-| [`test-manager-library-3145556-infra`](https://github.com/code-sena/test-manager-library-3145556-infra) | Contenedores, red, volúmenes y motor de base de datos vacío |
-| [`test-manager-library-3145556-tool`](https://github.com/code-sena/test-manager-library-3145556-tool) | Utilidades: sembrador de datos de demostración |
+T-21 pide además **3 préstamos vencidos**. Por la API no se pueden crear: `loaned_at` lo pone el servidor con la hora actual y el
+vencimiento es a 14 días (CA-06.6); el contrato no tiene ningún endpoint para fechar préstamos en el pasado. Los vencidos aparecerán
+en `/loans/overdue` cuando pasen 14 días. Se deja registrado en `docs/spec-laravel/interpretations.md` (M-06).
